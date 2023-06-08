@@ -1,20 +1,46 @@
-import Image from "next/image";
-
-const getPost = async (id: number) => {
-    const res = await fetch(`https://jsonplaceholder.typicode.com/photos/${id}`, { cache: "no-store" });
-
-    return res.json();
+'use client'
+import { ApolloClient, InMemoryCache } from "@apollo/client";
+import { useEffect, useState } from 'react';
+import { GET_POST_BY_ID } from "../../../../graghql/PostQueries";
+type Post = {
+    title: string;
+    description: string;
 };
+export default function Post({ params }: { params: { id: string } }) {
+    const [post, setPost] = useState<Post | null>(null);
 
-export default async function BlogPost({ params }: { params: { id: number; title: string; url: string } }) {
-    const post = await getPost(params.id);
 
-    return (
-        <div className="flex justify-between">
-            <div>
-                <p>{post.title}</p>
-            </div>
-            <Image alt="post image" width={500} height={500} src={post.url} />
-        </div>
-    );
+    useEffect(() => {
+        const getData = async function () {
+            const client = new ApolloClient({
+                uri: 'http://localhost:1337/graphql',
+                cache: new InMemoryCache(),
+            });
+
+            const { data } = await client.query({
+                query: GET_POST_BY_ID,
+                variables: { id: params.id }
+            })
+
+            return data
+        }
+        const fetchData = async () => {
+            try {
+                const data = await getData();
+
+                setPost(data.post.data.attributes)
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+
+        fetchData()
+
+    }, [])
+
+
+    return <div>This is blog
+        <div>Post title:{post?.title}</div>
+        <div>Post description:{post?.description}</div>
+    </div>;
 }

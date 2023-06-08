@@ -1,11 +1,11 @@
-import Navbar from "@/components/navbar/Navbar";
+import Navbar from "@/components/Navbar/Navbar";
 import "./globals.css";
 import { Inter } from "next/font/google";
-import Footer from "@/components/footer/Footer";
+import Footer from "@/components/Footer/Footer";
 
 import "tailwindcss/tailwind.css";
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
     title: "Simple App With NextJS",

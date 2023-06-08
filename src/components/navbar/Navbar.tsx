@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@mui/material";
 import Link from "next/link";
+import BasicModal from "../Modal/Modal";
 
 const links = [
     { id: 1, title: "Home", url: "/" },
@@ -20,10 +21,8 @@ export default function Navbar() {
                         {link.title}
                     </Link>
                 ))}
-                <Button variant="contained" color="success">
-                    Login
-                </Button>
             </div>
+            <BasicModal />
         </div>
     );
 }
